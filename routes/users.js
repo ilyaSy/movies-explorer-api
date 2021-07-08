@@ -4,6 +4,7 @@ const router = require('express').Router();
 const {
   getMe,
   updateProfile,
+  logout,
 } = require('../controllers/users');
 
 router.get('/users/me', getMe);
@@ -14,5 +15,7 @@ router.patch('/users/me', celebrate({
     email: Joi.string().required().email(),
   }),
 }), updateProfile);
+
+router.post('/signout', logout);
 
 module.exports = router;

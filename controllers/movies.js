@@ -1,4 +1,5 @@
 const Movie = require('../models/movie');
+const ERROR_TEXT = require('../utils/constants');
 const CustomError = require('../utils/CustomError');
 
 module.exports.getMovies = (req, res, next) => {
@@ -16,8 +17,8 @@ module.exports.deleteMovie = (req, res, next) => {
     .orFail(() => {
       throw Error('NoData');
     })
-    .then((card) => {
-      if (card.owner.toString() !== userId) {
+    .then((movie) => {
+      if (movie.owner.toString() !== userId) {
         throw Error('BadRules');
       }
 
@@ -25,52 +26,29 @@ module.exports.deleteMovie = (req, res, next) => {
         .then((movieRemoved) => res.send(movieRemoved))
         .catch((err) => {
           if (err.name === 'CastError') {
-            throw new CustomError(400, 'Переданы некорректные данные');
+            throw new CustomError(400, ERROR_TEXT[400]);
           }
-          throw new CustomError(500, 'На сервере произошла ошибка');
+          throw new CustomError(500, ERROR_TEXT[500]);
         })
         .catch(next);
     })
     .catch((err) => {
       if (err.message === 'NoData') {
-        throw new CustomError(404, 'Фильм не найден');
+        throw new CustomError(404, ERROR_TEXT['404_movie']);
       }
       if (err.message === 'BadRules') {
-        throw new CustomError(403, 'У вас нет прав удалять фильмы других пользователей');
+        throw new CustomError(403, ERROR_TEXT[403]);
       }
-      throw new CustomError(500, 'На сервере произошла ошибка');
+      throw new CustomError(500, ERROR_TEXT[500]);
     })
     .catch(next);
 };
 
 module.exports.createMovie = (req, res, next) => {
-  const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailer,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-  } = req.body;
   const userId = req.user._id;
 
   Movie.create({
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailer,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
+    ...req.body,
     owner: userId,
   })
     .then((cardCreated) => {
@@ -83,11 +61,11 @@ module.exports.createMovie = (req, res, next) => {
         throw new CustomError(400, err.errors.link.message);
       }
       if (err.message === 'NoData') {
-        throw new CustomError(404, 'Фильм не найдена');
+        throw new CustomError(404, ERROR_TEXT['404_movie']);
       } else if (err.name === 'CastError') {
-        throw new CustomError(400, 'Переданы некорректные данные');
+        throw new CustomError(400, ERROR_TEXT[400]);
       }
-      throw new CustomError(500, 'На сервере произошла ошибка');
+      throw new CustomError(500, ERROR_TEXT[500]);
     })
     .catch(next);
 };
