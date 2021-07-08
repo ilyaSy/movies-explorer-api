@@ -11,6 +11,4 @@ const ERROR_TEXT = {
   500: 'На сервере произошла ошибка',
 };
 
-module.exports = {
-  ERROR_TEXT,
-};
+module.exports = ERROR_TEXT;
