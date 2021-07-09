@@ -113,8 +113,11 @@ module.exports.updateProfile = (req, res, next) => {
     .orFail(new Error('NoData'))
     .then((user) => res.send(user))
     .catch((err) => {
+      // throw new CustomError(400, err.message);
       if (err.message === 'NoData') {
         throw new CustomError(404, ERROR_TEXT['404_user']);
+      } else if (err.name === 'MongoError' && err.code === 11000) {
+        throw new CustomError(409, ERROR_TEXT[409]);
       } else if (err.name === 'CastError') {
         throw new CustomError(400, ERROR_TEXT[400]);
       }
