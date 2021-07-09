@@ -28,7 +28,7 @@ module.exports.deleteMovie = (req, res, next) => {
           if (err.name === 'CastError') {
             throw new CustomError(400, ERROR_TEXT[400]);
           }
-          throw new CustomError(500, ERROR_TEXT[500]);
+          throw err;
         })
         .catch(next);
     })
@@ -39,7 +39,7 @@ module.exports.deleteMovie = (req, res, next) => {
       if (err.message === 'BadRules') {
         throw new CustomError(403, ERROR_TEXT[403]);
       }
-      throw new CustomError(500, ERROR_TEXT[500]);
+      throw err;
     })
     .catch(next);
 };
@@ -65,7 +65,7 @@ module.exports.createMovie = (req, res, next) => {
       } else if (err.name === 'CastError') {
         throw new CustomError(400, ERROR_TEXT[400]);
       }
-      throw new CustomError(500, ERROR_TEXT[500]);
+      throw err;
     })
     .catch(next);
 };
