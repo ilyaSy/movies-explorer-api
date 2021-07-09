@@ -54,9 +54,7 @@ module.exports.createMovie = (req, res, next) => {
       if (err.errors && err.errors.link) {
         throw new CustomError(400, err.errors.link.message);
       }
-      if (err.message === 'NoData') {
-        throw new CustomError(404, ERROR_TEXT['404_movie']);
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         throw new CustomError(400, ERROR_TEXT[400]);
       }
       throw err;
