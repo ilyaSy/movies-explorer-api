@@ -27,7 +27,7 @@ router.post(
       thumbnail: Joi.string()
         .regex(/^https?:\/\/(www\.)?[a-zA-Z0-9@:%._+~#=]{2,256}\.([a-z]{2,6})([a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)$/)
         .required(),
-      movieId: Joi.string().required(),
+      movieId: Joi.number().required(),
       nameRU: Joi.string().required(),
       nameEN: Joi.string().required(),
     }),
