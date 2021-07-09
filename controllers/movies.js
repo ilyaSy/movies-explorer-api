@@ -22,14 +22,8 @@ module.exports.deleteMovie = (req, res, next) => {
         throw Error('BadRules');
       }
 
-      Movie.findByIdAndRemove(movieId)
-        .then((movieRemoved) => res.send(movieRemoved))
-        .catch((err) => {
-          if (err.name === 'CastError') {
-            throw new CustomError(400, ERROR_TEXT[400]);
-          }
-          throw err;
-        })
+      movie.remove()
+        .then(() => res.send({ movie }))
         .catch(next);
     })
     .catch((err) => {
