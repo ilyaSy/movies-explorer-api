@@ -1,6 +1,6 @@
 const { Joi, celebrate } = require('celebrate');
 const router = require('express').Router();
-
+const { regExpUrl } = require('../utils/config');
 const {
   getMovies,
   createMovie,
@@ -18,15 +18,9 @@ router.post(
       duration: Joi.number().required(),
       year: Joi.string().required(),
       description: Joi.string().required(),
-      image: Joi.string()
-        .regex(/^https?:\/\/(www\.)?[a-zA-Z0-9@:%._+~#=]{2,256}\.([a-z]{2,6})([a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)$/)
-        .required(),
-      trailer: Joi.string()
-        .regex(/^https?:\/\/(www\.)?[a-zA-Z0-9@:%._+~#=]{2,256}\.([a-z]{2,6})([a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)$/)
-        .required(),
-      thumbnail: Joi.string()
-        .regex(/^https?:\/\/(www\.)?[a-zA-Z0-9@:%._+~#=]{2,256}\.([a-z]{2,6})([a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)$/)
-        .required(),
+      image: Joi.string().regex(regExpUrl).required(),
+      trailer: Joi.string().regex(regExpUrl).required(),
+      thumbnail: Joi.string().regex(regExpUrl).required(),
       movieId: Joi.number().required(),
       nameRU: Joi.string().required(),
       nameEN: Joi.string().required(),
