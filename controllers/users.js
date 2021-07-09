@@ -30,9 +30,6 @@ module.exports.createUser = (req, res, next) => {
         throw new CustomError(409, ERROR_TEXT[409]);
       }
       throw err;
-      // else if (err.name === 'ValidationError') {
-      //   throw new CustomError(500, ERROR_TEXT[500]);
-      // }
     }))
     .then((user) => res.send({
       data: {
@@ -87,14 +84,11 @@ module.exports.getMe = (req, res, next) => {
   const userId = req.user._id;
 
   User.findById(userId)
-    .orFail(new Error('NoData'))
-    .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.message === 'NoData') {
-        throw new CustomError(404, ERROR_TEXT['404_user']);
-      }
-      throw err;
+    .orFail(() => {
+      throw new CustomError(404, ERROR_TEXT['404_user']);
     })
+    .then((user) => res.send({ data: user }))
+    .catch((err) => { throw err; })
     .catch(next);
 };
 
@@ -110,12 +104,12 @@ module.exports.updateProfile = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new Error('NoData'))
+    .orFail(() => {
+      throw new CustomError(404, ERROR_TEXT['404_user']);
+    })
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.message === 'NoData') {
-        throw new CustomError(404, ERROR_TEXT['404_user']);
-      } else if (err.name === 'MongoError' && err.code === 11000) {
+      if (err.name === 'MongoError' && err.code === 11000) {
         throw new CustomError(409, ERROR_TEXT[409]);
       } else if (err.name === 'CastError') {
         throw new CustomError(400, ERROR_TEXT[400]);

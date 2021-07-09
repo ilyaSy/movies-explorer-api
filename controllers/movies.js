@@ -15,26 +15,18 @@ module.exports.deleteMovie = (req, res, next) => {
 
   Movie.findById(movieId)
     .orFail(() => {
-      throw Error('NoData');
+      throw new CustomError(404, ERROR_TEXT['404_movie']);
     })
     .then((movie) => {
       if (movie.owner.toString() !== userId) {
-        throw Error('BadRules');
+        throw new CustomError(403, ERROR_TEXT[403]);
       }
 
       movie.remove()
         .then(() => res.send({ movie }))
         .catch(next);
     })
-    .catch((err) => {
-      if (err.message === 'NoData') {
-        throw new CustomError(404, ERROR_TEXT['404_movie']);
-      }
-      if (err.message === 'BadRules') {
-        throw new CustomError(403, ERROR_TEXT[403]);
-      }
-      throw err;
-    })
+    .catch((err) => { throw err; })
     .catch(next);
 };
 
