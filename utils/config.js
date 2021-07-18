@@ -27,6 +27,9 @@ const corsOptions = {
   origin: [
     'http://ilya.nomoredomains.club',
     'https://ilya.nomoredomains.club',
+    'http://diploma.ilya.nomoredomains.monster',
+    'https://diploma.ilya.nomoredomains.monster',
+    'http://84.201.128.18',
     'http://localhost:3000',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
