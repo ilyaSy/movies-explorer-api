@@ -27,6 +27,6 @@
 
 * Вспомогательные настройки (ESlint, editorconfig)
 
-[Адрес api](https://api.diploma.ilya.nomoredomains.monster)
+[Адрес api](https://ilya.nomoredomains.club)
 -----
 **Автор: Сычугов Илья**
